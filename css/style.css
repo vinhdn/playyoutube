@@ -1,0 +1,135 @@
+#head{
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 999999;
+	padding-top: 8px;
+	padding-bottom: 9px;
+	background: rgb(03,153,253);
+	height: 30px;
+}
+#title{
+	float: left;
+	width: 300px;
+	position: relative;
+	margin-top: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 20px;
+	color: #fff;
+}
+.form-inline{
+	margin: auto;
+}
+#btn-blue{
+	background: #007acc;
+}
+#input-video-id, #search-video-id{
+	height: auto;
+	width: 50%;
+}
+ #search-video-id{
+ 	margin-left: 5%;
+ 	margin-right: auto;
+ 	margin-bottom: 10px;
+ 	margin-top: 10px;
+ 	width: 70%;
+ }
+#play_submit{
+	padding: 0dp;
+}
+.container-fluid{
+	margin-right: 0px;
+	margin-left: 0px;
+	position: relative;
+}
+.container{
+	width: 65%;
+	margin-top: 50px;
+	margin-left: 5px;
+	background: aliceblue;
+	float: left;
+}
+.sidebar{
+	width: 30%;
+	margin-top: 50px;
+	margin-right: 5px;
+	background: aliceblue;
+	float: right;
+}
+.info-video{
+	margin-left: 10px;
+	position: relative;
+}
+#views-video{
+	position: absolute;
+	right: 20px;
+	top: 0px;
+}
+
+@mixin vendor($property,$value) {
+  -webkit-#{$property}: #{$value};
+     -moz-#{$property}: #{$value};
+      -ms-#{$property}: #{$value};
+       -o-#{$property}: #{$value};
+          #{$property}: #{$value};
+}
+
+@mixin keyframes($value) {
+  @-webkit-keyframes #{$value}{ @content }
+     @-moz-keyframes #{$value}{ @content }
+      @-ms-keyframes #{$value}{ @content }
+       @-o-keyframes #{$value}{ @content }
+          @keyframes #{$value}{ @content }
+}
+
+#sonuc{
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-bottom: 20px;
+}
+
+.circle {
+  height: 7em; 
+  width: 7em;
+  @include border-radius(100%);
+  border: 0.2em solid grey;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  overflow: hidden;
+  @include vendor(animation,boom 3.5s linear infinite);
+}
+
+.circle:after {
+  content: '';
+  position: absolute;
+  border: 0.2em solid;
+  color: #999;
+  width: 0.8em;
+  height: 0.8em;
+  @include border-radius(100%);
+  margin: 2.8em;
+  @include vendor(box-shadow,(0.8em 0.8em, 1.6em 1.6em, -0.8em 0.8em, -1.6em 1.6em, 0.8em -0.8em, 1.6em -1.6em, -0.8em -0.8em, -1.6em -1.6em));
+  @include vendor(animation,boom1 3.5s linear infinite);
+}
+
+@include keyframes(boom) {
+  60% {
+    @include transform(rotate(360deg) scale(0.6));
+    color: grey;
+    @include vendor(box-shadow,(1em 1em, 2em 2em, -1em 1em, -2em 2em, 1em -1em, 2em -2em, -1em -1em, -2em -2em));
+  }
+}
+
+@include keyframes(boom1) {
+  60% {
+    @include transform(rotate(270deg));
+    color: rgba(white,0.7);
+    @include vendor(box-shadow,(0.1em 0.1em, 0.2em 0.2em, -0.1em 0.1em, -0.2em 0.2em, 0.1em -0.1em, 0.2em -0.2em, -0.1em -0.1em, -0.2em -0.2em));
+  }
+}

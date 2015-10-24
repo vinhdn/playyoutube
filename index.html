@@ -1,0 +1,233 @@
+<head>
+	<script type="text/javascript" src="jwplayer.js"></script>
+	<script type="text/javascript">jwplayer.key="wd5/l08nWtMhX0MUVdASUJoI84lqwQ4JxeKMuKlwPIBpQv2jx7d4Gw==";</script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.1.min.js"></script>
+	<script type= "text/javascript">
+	function getYouTubeInfo() {
+		$.ajax({
+			url: "http://gdata.youtube.com/feeds/api/videos/"+url+"?v=2&alt=json",
+			dataType: "jsonp",
+			success: function (data) { parseresults(data); }
+		});
+	}
+
+	function parseresults(data) {
+		var title = data.entry.title.$t;
+		var description = data.entry.media$group.media$description.$t;
+		var viewcount = data.entry.yt$statistics.viewCount;
+		var author = data.entry.author[0].name.$t;
+		document.title = title;
+		$('#title-video').html(title);
+		$('#description').html('<b>Description</b>: ' + description);
+		$('#author-video').html('<b>Author</b>: ' + author);
+		$('#views-video').html(viewcount);
+		searchAuthor(title);
+		/*getComments(data.entry.gd$comments.gd$feedLink.href + '&max-results=50&alt=json', 1);*/
+	}
+/*
+        function getComments(commentsURL, startIndex) {
+                $.ajax({
+                        url: commentsURL + '&start-index=' + startIndex,
+                        dataType: "jsonp",
+                        success: function (data) {
+                        $.each(data.feed.entry, function(key, val) {
+                                $('#comments').append('<br/>Author: ' + val.author[0].name.$t + ', Comment: ' + val.content.$t);
+                        });
+                        if ($(data.feed.entry).size() == 50) { getComments(commentsURL, startIndex + 50); }
+                        }
+                });
+        }
+        */
+        $(document).ready(function () {
+        	getYouTubeInfo();
+        	searckk('maroon 5');
+        });
+
+        function searckk(){
+        	if(document.getElementById('search-video-id').value == '')
+        		return;
+        	var kelime = document.getElementById('search-video-id').value;
+        	var sonuc = $('#sonuc');
+        	sonuc.html('Searching...');
+        	$.ajax({
+        		type: 'GET',
+        		url: 'http://gdata.youtube.com/feeds/api/videos?q=' + kelime + '&max-results=15&v=2&alt=jsonc',
+        		dataType: 'jsonp',
+        		success: function( veri ){
+        			if( veri.data.items ){
+        				sonuc.empty();
+        				$.each( veri.data.items, function(i, data) {
+        					sonuc.append('<div class="youtube">\
+        						<img src="' + data.thumbnail.sqDefault + '" alt="" />\
+        						<h5><a href="javascript:void(0)" data-role="button" onclick="javascript:changeVideo(\'' + data.id +'\')" >' + data.title + '</a></h5>\
+        						<p>' + data.description + '</p>\
+        						</div>\
+        						<div class="youtubeOynat" id="' + data.id + '"></div>');
+        				});
+        			}
+        			else {
+        				sonuc.html('<div class="hata"><strong>' + kelime + '</strong> không tìm thấy video nào.!</div>');
+        			}
+        		}
+        	});
+        }
+
+        function searchAuthor(author){
+        	var sonuc = $('#sonuc');
+        	sonuc.html('Searching...');
+        	$.ajax({
+        		type: 'GET',
+        		url: 'http://gdata.youtube.com/feeds/api/videos?q=' + author + '&max-results=15&v=2&alt=jsonc',
+        		dataType: 'jsonp',
+        		success: function( veri ){
+        			if( veri.data.items ){
+        				sonuc.empty();
+        				$.each( veri.data.items, function(i, data) {
+        					sonuc.append('<div class="youtube">\
+        						<img src="' + data.thumbnail.sqDefault + '" alt="" />\
+        						<h5><a href="javascript:void(0)" data-role="button" onclick="javascript:changeVideo(\'' + data.id +'\')" >' + data.title + '</a></h5>\
+        						<p>' + data.description + '</p>\
+        						</div>\
+        						<div class="youtubeOynat" id="' + data.id + '"></div>');
+        				});
+        			}
+        			else {
+        				sonuc.html('<div class="hata"><strong>' + author + '</strong> Không tìm thấy video nào.!</div>');
+        			}
+        		}
+        	});
+        }
+
+        </script>
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/style.css" rel="stylesheet" media="screen">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style  type="text/css"
+
+        >
+        #player{
+        	margin:auto;
+        }
+/*
+Content-Type: multipart/related; boundary="MYSEPARATOR"
+
+--MYSEPARATOR
+Content-Location: image1
+Content-Transfer-Encoding: base64
+--MYSEPARATOR
+*/
+#background-image:  url('data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAYCAYAAAA7zJfaAAAAEElEQVR42mP4//8/AwP9CQD0ZEe52lV1zAAAAABJRU5ErkJggg==');
+*background-image: expression("url(mhtml:" + window.location + "!image1)");
+</style>
+</head>
+<body>
+	<div id="head">
+		<h1 id="Title">Youtube loop</h1>
+		<form class="form-inline search-form" action="/yt">
+			<input class="xlarge ui-autocomplete-input" id="input-video-id" name="v" type="text" placeholder="Insert Video ID..." autocomplete="off" value="" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+			<button class="btn-blue btn" id="play_submit" type="submit">Play</button>
+		</form>
+	</div>
+	
+	<div class="container-fluid" id="main">
+
+		<div class="container">
+			<div id='player'></div>
+			<div class="info-video">
+				<h2 id="title-video"></h2>
+				<h4 id="author-video"></h4>
+				<h5 id="views-video"></h5>
+				<div id='qual'></div>
+			</div>
+		</div>
+		<div class="sidebar" id="play-side">
+			<input class="xlarge ui-autocomplete-input" id="search-video-id" name="v" type="text" placeholder="Insert Video ID..." autocomplete="off" value="" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+			<button class="btn-blue btn" id="search_submit" onclick="searckk()" type="submit">Search</button>
+			<div id="sonuc"></div>
+		</div>
+	</div>
+	<script type='text/javascript'>
+	$(document).ready(function(){
+		$("btn-play").click(function(){
+			console("play");
+
+		});
+	});
+	(function($) {
+		$.fn.onEnter = function(func) {
+			this.bind('keypress', function(e) {
+				if (e.keyCode == 13) func.apply(this, [e]);    
+			});               
+			return this; 
+		};
+	})(jQuery);
+	$('#search-video-id').keyup(function(e){
+		if(e.keyCode == 13)
+		{
+			searckk();
+		}
+	});
+
+	function changeVideo(id){
+		url = id;
+		getYouTubeInfo();
+		var urlf = 'https://www.youtube.com/watch?v=' + id;
+		console.log(urlf);
+		jwplayer('player').setup({
+			file: urlf,
+			width: '100%',
+			aspectratio: '16:9',
+			skin: 'skins/five.xml',
+			repeat: true,
+			autostart: true,
+		});
+		console.log('changeVideo');
+		jwplayer('player').onPlay(function() {
+			var ad = jwplayer().getQualityLevels();
+			var id = ad.length;
+			if(id > 0){
+				id = 1;
+			}else
+			id= 0;
+			jwplayer().setCurrentQuality(id);
+		});
+	}
+
+	function GetURLParameter(sParam)
+	{
+		var sPageURL = window.location.search.substring(1);
+		var sURLVariables = sPageURL.split('&');
+		for (var i = 0; i < sURLVariables.length; i++) 
+		{
+			var sParameterName = sURLVariables[i].split('=');
+			if (sParameterName[0] == sParam) 
+			{
+				return sParameterName[1];
+			}
+		}
+		function setid(){
+			alert("Click");
+		}
+	}
+	var url = GetURLParameter('v');
+	//changeVideo(url);
+	function playm3u8(){
+		var url = "http://plist.vn-hd.com/mp4v3/7a15991bd7de1ad996bde302a62eb8a8/f3af54824a914ed78467b002e3e9c7b7/00000000000000000000000000000000/10673_e1_320_480_ivdc.smil/playlist.m3u8";
+		jwplayer('player').setup({
+			file: url,
+			width: '100%',
+			aspectratio: '16:9',
+			skin: 'skins/five.xml',
+			repeat: true,
+			autostart: true,
+		});
+		console.log('changeVideo');
+		jwplayer('player').onPlay(function() {
+			console.log('played');
+		});	
+	}
+	playm3u8();
+	</script>
+
+</body>
